@@ -40,15 +40,19 @@ class Registration extends Component {
       this.setState({pwderr: 'Password is required'})
       return false;
     }
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    console.log(myHeaders);
     fetch('https://lab.lectrum.io/redux/api/user/6vf77z4hd5', {
       method: 'post',
-      body: {
+      headers: myHeaders,
+      body: JSON.stringify({
         firstname: this.state.firstname,
         lastname: this.state.lastname,
         email: this.state.email,
         password: this.state.password,
         invite: "rtASDLastuev77"
-      }
+      })
     }).then(res => console.log(res)).catch(err => console.log('err', err))
   }
   

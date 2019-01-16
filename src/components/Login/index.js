@@ -30,8 +30,11 @@ class Login extends Component {
       this.setState({pwderr: 'Password is required'})
       return false;
     }
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
     fetch('https://lab.lectrum.io/redux/api/user/login', {
       method: 'post',
+      headers: myHeaders,
       body: {
         email: this.state.email,
         password: this.state.password
