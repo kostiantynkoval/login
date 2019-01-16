@@ -40,12 +40,11 @@ class Login extends Component {
   }
   
   render() {
-    console.log(this.state);
     return (
       <form onSubmit={this.submitLogin}>
-        <input className='input' name="email" type="text" onChange={this.onChange}/>
+        <input placeholder='Email' className='input' name="email" type="text" onChange={this.onChange}/>
         {this.state.emailerr !== '' && <div className='error'>{this.state.emailerr}</div>}
-        <input className='input' name="password" type="password" onChange={this.onChange}/>
+        <input placeholder='Password' className='input' name="password" type="password" onChange={this.onChange}/>
         {this.state.pwderr !== '' && <div className='error'>{this.state.pwderr}</div>}
         <input type="submit"/>
       </form>

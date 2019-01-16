@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Redirect,
   Route,
-  Link,
   Switch,
   BrowserRouter as Router} from 'react-router-dom';
 import PrivateRoute from './utils/PrivateRoute'
