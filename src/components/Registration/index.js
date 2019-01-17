@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+
+axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 class Registration extends Component {
   state = {
@@ -11,6 +14,10 @@ class Registration extends Component {
     firstnameerr: '',
     lastnameerr: '',
   }
+
+  componentDidMount() {
+    localStorage.setItem('token', '');
+  }
   
   onChange = (e) => {
     this.setState({[e.target.name]: e.target.value, emailerr: '', pwderr: '', firstnameerr: '', lastnameerr: ''})
@@ -18,7 +25,6 @@ class Registration extends Component {
   
   submitLogin = (e) => {
     e.preventDefault();
-    console.log(e)
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(this.state.firstname === '') {
       this.setState({firstnameerr: 'Firstname is required'})
@@ -40,20 +46,17 @@ class Registration extends Component {
       this.setState({pwderr: 'Password is required'})
       return false;
     }
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    console.log(myHeaders);
-    fetch('https://lab.lectrum.io/redux/api/user/6vf77z4hd5', {
-      method: 'post',
-      headers: myHeaders,
-      body: JSON.stringify({
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
+
+    axios.post('https://lab.lectrum.io/redux/api/user/6vf77z4hd5', {
+        firstName: this.state.firstname,
+        lastName: this.state.lastname,
         email: this.state.email,
         password: this.state.password,
         invite: "rtASDLastuev77"
-      })
-    }).then(res => console.log(res)).catch(err => console.log('err', err))
+    }).then(res => {
+        localStorage.setItem('token', res.data.data.token);
+        this.props.history.push('/');
+    }).catch(err => console.log('err', err))
   }
   
   render() {

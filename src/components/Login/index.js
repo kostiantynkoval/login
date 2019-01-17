@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
+import axios from 'axios';
+//import {Redirect} from 'react-router-dom';
 import './Login.css';
+
+axios.defaults.headers.common['Content-Type'] = 'application/json';
 
 class Login extends Component {
   
@@ -9,6 +13,10 @@ class Login extends Component {
     emailerr: '',
     pwderr: ''
   }
+
+  componentDidMount() {
+    localStorage.setItem('token', '');
+  }
   
   onChange = (e) => {
     this.setState({[e.target.name]: e.target.value, emailerr: '', pwderr: ''})
@@ -16,7 +24,6 @@ class Login extends Component {
   
   submitLogin = (e) => {
     e.preventDefault();
-    console.log(e)
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if(!re.test(String(this.state.email).toLowerCase())) {
       this.setState({emailerr: 'Email is not valid'})
@@ -30,16 +37,14 @@ class Login extends Component {
       this.setState({pwderr: 'Password is required'})
       return false;
     }
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    fetch('https://lab.lectrum.io/redux/api/user/login', {
-      method: 'post',
-      headers: myHeaders,
-      body: {
+
+    axios.post('https://lab.lectrum.io/redux/api/user/login', {
         email: this.state.email,
         password: this.state.password
-      }
-    }).then(res => console.log(res)).catch(err => console.log('err', err))
+    }).then(res => {
+      localStorage.setItem('token', res.data.data.token);
+      this.props.history.push('/');
+    }).catch(err => console.log('err', err))
   }
   
   render() {
